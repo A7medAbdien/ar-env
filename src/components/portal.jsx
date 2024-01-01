@@ -1,22 +1,45 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, Edges, MeshPortalMaterial, CameraControls, Environment, PivotControls, useHelper } from '@react-three/drei'
 import { useControls } from 'leva'
 import { SpotLightHelper } from 'three'
+import { easing } from 'maath'
+
 import PortalEnv from './PortalEnv'
 
-export const Portal = () => (
-    <mesh castShadow receiveShadow>
-        <boxGeometry args={[2, 2, 2]} />
-        <Side rotation={[0, Math.PI / 2, Math.PI / 2]} index={2}>
-            <PortalEnv />
-        </Side>
-    </mesh>
-)
+export const Portal = () => {
+    const cover = useRef()
+    const { s } = useControls({ s: { value: 1, max: 1, min: 0 } })
+
+    useFrame((state, dt) => {
+        // easing.damp3(cover.current.position, [0, 0, 0], 0.1, dt)
+    })
+
+    useEffect(() => {
+        cover.current.geometry.translate(0, -1, 0);
+    }, [])
+    return (
+        <>
+            <mesh position={[0, -1, 0]} castShadow receiveShadow>
+                <boxGeometry args={[2, 2, 2]} />
+                <Side rotation={[0, Math.PI / 2, Math.PI / 2]} index={2}>
+                    <PortalEnv />
+                </Side>
+            </mesh>
+
+
+            <mesh position={[0, 0.01, -1]} rotation={[(-Math.PI / 2) * s, 0, 0]} ref={cover} >
+                <planeGeometry args={[2.01, 2.01]} />
+                <meshBasicMaterial color={"#f0f0f0"} />
+            </mesh>
+
+        </>
+    )
+}
 
 function Side({ rotation = [0, 0, 0], children, index }) {
     const li = useRef()
-    useHelper(li, SpotLightHelper, 10, "red");
+    // useHelper(li, SpotLightHelper, 10, "red");
     const { bg } = useControls({ bg: '#f0f0f0' })
     const { nodes } = useGLTF('/aobox-transformed.glb')
     return (
