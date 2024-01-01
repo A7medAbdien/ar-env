@@ -3,9 +3,11 @@ import { useControls } from 'leva';
 import { easing } from 'maath';
 import React, { useEffect, useRef, useState } from 'react';
 import { Mesh } from 'three';
+import { useGlobal } from '../context/useGlobal';
 
 function PortalEnv() {
-    const [start, setStart] = useState(false)
+    const { start } = useGlobal()
+    console.log(start);
 
     const mesh = useRef<Mesh>(null!)
     const coverBottom = useRef<Mesh>(null!)
