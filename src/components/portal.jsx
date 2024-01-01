@@ -8,9 +8,11 @@ import { easing } from 'maath'
 import PortalEnv from './PortalEnv'
 import { useGlobal } from '../context/useGlobal'
 import { Lights } from './Lights'
+import useDelayedEasing from '../hooks/useDelayedEasing';
 
 export const Portal = () => {
     const { start, gltfColor, endPos } = useGlobal()
+    const startEasing = useDelayedEasing();
 
     const mesh = useRef()
 
@@ -18,7 +20,7 @@ export const Portal = () => {
         if (mesh.current)
             mesh.current.rotation.x = mesh.current.rotation.y += delta
 
-        if (mesh.current && start)
+        if (mesh.current && startEasing)
             easing.damp3(mesh.current.position, endPos, 4, delta)
         else
             easing.damp3(mesh.current.position, [0, 0, 0], 4, delta)
