@@ -1,23 +1,31 @@
 import { useFrame } from '@react-three/fiber';
 import { useControls } from 'leva';
 import { easing } from 'maath';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Mesh } from 'three';
 
 function PortalEnv() {
+    const [start, setStart] = useState(false)
+
     const mesh = useRef<Mesh>(null!)
-    const { gltfColor } = useControls({ worldUnits: false, bg: '#f0f0f0', gltfColor: '#3e3e3e' })
     const coverBottom = useRef<Mesh>(null!)
     const coverUp = useRef<Mesh>(null!)
+
+    const { gltfColor } = useControls({ worldUnits: false, bg: '#f0f0f0', gltfColor: '#3e3e3e' })
     const { s } = useControls({ s: { value: 0, max: 1, min: 0 } })
 
     useFrame((state, delta) => {
         if (mesh.current)
             mesh.current.rotation.x = mesh.current.rotation.y += delta
 
-        // if (coverBottom.current)
-        easing.damp3(coverBottom.current.position, [0, 1, -1.5], 2, delta)
-        easing.damp3(coverUp.current.position, [0, 1, 1.5], 2, delta)
+        if (coverBottom.current && coverUp.current && start) {
+            easing.damp3(coverBottom.current.position, [0, 1, -1.5], 2, delta)
+            easing.damp3(coverUp.current.position, [0, 1, 1.5], 2, delta)
+        } else {
+            easing.damp3(coverBottom.current.position, [0, 1, -0.5], 2, delta)
+            easing.damp3(coverUp.current.position, [0, 1, 0.5], 2, delta)
+
+        }
     })
 
 
