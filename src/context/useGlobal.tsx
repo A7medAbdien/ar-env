@@ -6,6 +6,7 @@ interface GlobalContextProps {
     setStart: React.Dispatch<React.SetStateAction<boolean>>;
     gltfColor: string
     bg: string
+    endPos: any
 }
 
 const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
@@ -13,8 +14,10 @@ const GlobalContext = createContext<GlobalContextProps | undefined>(undefined);
 export const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [start, setStart] = useState(false);
     const { gltfColor, bg } = useControls({ bg: '#f0f0f0', gltfColor: '#3e3e3e' })
+    const endPos = [0, 3, 0]
+
     return (
-        <GlobalContext.Provider value={{ start, setStart, gltfColor, bg }}>
+        <GlobalContext.Provider value={{ start, setStart, gltfColor, bg, endPos }}>
             {children}
         </GlobalContext.Provider>
     );

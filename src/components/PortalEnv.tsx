@@ -6,7 +6,7 @@ import { Mesh } from 'three';
 import { useGlobal } from '../context/useGlobal';
 
 function PortalEnv() {
-    const { start, gltfColor } = useGlobal()
+    const { start, gltfColor, endPos } = useGlobal()
 
     const mesh = useRef<Mesh>(null!)
     const coverBottom = useRef<Mesh>(null!)
@@ -18,6 +18,11 @@ function PortalEnv() {
         if (mesh.current)
             mesh.current.rotation.x = mesh.current.rotation.y += delta
 
+        if (mesh.current && start)
+            easing.damp3(mesh.current.position, endPos, 4, delta)
+        else
+            easing.damp3(mesh.current.position, [0, 0, 0], 4, delta)
+
         if (coverBottom.current && coverUp.current && start) {
             easing.damp3(coverBottom.current.position, [0, 1, -1.6], 2, delta)
             easing.damp3(coverUp.current.position, [0, 1, 1.6], 2, delta)
@@ -28,12 +33,6 @@ function PortalEnv() {
         }
     })
 
-
-    // useEffect(() => {
-    //     if (!coverBottom.current) return;
-    //     coverBottom.current.geometry.translate(0, -0.5, 0);
-    //     coverUp.current.geometry.translate(0, 0.5, 0);
-    // }, [])
 
     return (
         <>

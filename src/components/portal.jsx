@@ -10,13 +10,18 @@ import { useGlobal } from '../context/useGlobal'
 import { Lights } from './Lights'
 
 export const Portal = () => {
-    const { start, gltfColor } = useGlobal()
+    const { start, gltfColor, endPos } = useGlobal()
 
     const mesh = useRef()
 
     useFrame((state, delta) => {
         if (mesh.current)
             mesh.current.rotation.x = mesh.current.rotation.y += delta
+
+        if (mesh.current && start)
+            easing.damp3(mesh.current.position, endPos, 4, delta)
+        else
+            easing.damp3(mesh.current.position, [0, 0, 0], 4, delta)
     })
 
     return (
@@ -33,7 +38,7 @@ export const Portal = () => {
                 {/* Inner */}
                 <mesh
                     ref={mesh}
-                    position={[0, 0, 0]}
+                    visible={start}
                     castShadow
                     receiveShadow
                 >
