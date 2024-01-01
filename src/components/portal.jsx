@@ -31,11 +31,13 @@ export const Portal = () => {
 
             <Lights />
 
-            <mesh position={[0, -1, 0]} castShadow receiveShadow>
-                <boxGeometry args={[2, 2, 2]} />
-                <Side rotation={[0, Math.PI / 2, Math.PI / 2]} index={2}>
-                    <PortalEnv />
-                </Side>
+            <group position={[0, -1, 0]}>
+                <mesh castShadow receiveShadow>
+                    <boxGeometry args={[2, 2, 2]} />
+                    <Side rotation={[0, Math.PI / 2, Math.PI / 2]} index={2}>
+                        <PortalEnv />
+                    </Side>
+                </mesh>
 
                 {/* Inner */}
                 <mesh
@@ -47,7 +49,7 @@ export const Portal = () => {
                     <dodecahedronGeometry />
                     <meshStandardMaterial color={gltfColor} />
                 </mesh>
-            </mesh>
+            </group>
         </>
     )
 }
