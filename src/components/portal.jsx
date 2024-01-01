@@ -8,16 +8,7 @@ import { easing } from 'maath'
 import PortalEnv from './PortalEnv'
 
 export const Portal = () => {
-    const cover = useRef()
-    const { s } = useControls({ s: { value: 1, max: 1, min: 0 } })
 
-    useFrame((state, dt) => {
-        // easing.damp3(cover.current.position, [0, 0, 0], 0.1, dt)
-    })
-
-    useEffect(() => {
-        cover.current.geometry.translate(0, -1, 0);
-    }, [])
     return (
         <>
             <mesh position={[0, -1, 0]} castShadow receiveShadow>
@@ -26,13 +17,6 @@ export const Portal = () => {
                     <PortalEnv />
                 </Side>
             </mesh>
-
-
-            <mesh position={[0, 0.01, -1]} rotation={[(-Math.PI / 2) * s, 0, 0]} ref={cover} >
-                <planeGeometry args={[2.01, 2.01]} />
-                <meshBasicMaterial color={"#f0f0f0"} />
-            </mesh>
-
         </>
     )
 }
