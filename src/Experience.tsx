@@ -1,43 +1,43 @@
 import { MeshWobbleMaterial, OrbitControls, useTexture } from '@react-three/drei'
 import React from 'react'
 import * as THREE from 'three'
+import { Portal } from './components/portal';
+import { Perf } from 'r3f-perf';
 
 export default function Experience() {
+
+    // Create the main box shape
+    const boxShape = new THREE.Shape();
+    boxShape.moveTo(-1, -1);
+    boxShape.lineTo(-1, 1);
+    boxShape.lineTo(1, 1);
+    boxShape.lineTo(1, -1);
+    boxShape.lineTo(-1, -1);
+
+    // Create the hole shape
+    const holeShape = new THREE.Path();
+    holeShape.absarc(0, 0, 0.8, 0, Math.PI * 2, false);
+    boxShape.holes.push(holeShape);
+
+    // Create the extruded geometry with holes
+    const extrudeSettings = {
+        steps: 1,
+        depth: 2,
+        bevelEnabled: false,
+    };
+
+    const geometry0 = new THREE.ExtrudeGeometry(boxShape, extrudeSettings);
+
+
     return <>
 
-        <ambientLight />
-        <pointLight position={[10, 10, 10]} />
+        {/* <ambientLight /> */}
+        {/* <pointLight position={[10, 10, 10]} /> */}
 
-        {/* <OrbitControls makeDefault /> */}
+        <axesHelper />
+        <OrbitControls makeDefault />
+        <Perf position="top-left" />
 
-        {/* <mesh scale={1.5}>
-            <boxGeometry />
-            <meshNormalMaterial />
-        </mesh> */}
-
-        <Sticker position={[1, 0, 1]} scale={2} />
+        <Portal />
     </>
-}
-
-const Sticker = ({ ...props }) => {
-    const [smiley, invert] = useTexture(['Sticjer_1024x1024@2x.png', 'Sticjer_1024x1024@2x_invert.png'])
-    return (
-        <mesh   {...props}>
-            <planeGeometry args={[1, 1, 32, 32]} />
-            <MeshWobbleMaterial
-                factor={4}
-                speed={2}
-                depthTest={false}
-                transparent
-                map={smiley}
-                map-flipY={false}
-                roughness={1}
-                roughnessMap={invert}
-                roughnessMap-flipY={false}
-                map-anisotropy={16}
-                metalness={0.8}
-                side={THREE.DoubleSide}
-            />
-        </mesh>
-    )
 }
