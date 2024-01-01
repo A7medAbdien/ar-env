@@ -6,14 +6,12 @@ import { Mesh } from 'three';
 import { useGlobal } from '../context/useGlobal';
 
 function PortalEnv() {
-    const { start } = useGlobal()
-    console.log(start);
+    const { start, gltfColor } = useGlobal()
 
     const mesh = useRef<Mesh>(null!)
     const coverBottom = useRef<Mesh>(null!)
     const coverUp = useRef<Mesh>(null!)
 
-    const { gltfColor } = useControls({ worldUnits: false, bg: '#f0f0f0', gltfColor: '#3e3e3e' })
     const { s } = useControls({ s: { value: 0, max: 1, min: 0 } })
 
     useFrame((state, delta) => {
@@ -21,8 +19,8 @@ function PortalEnv() {
             mesh.current.rotation.x = mesh.current.rotation.y += delta
 
         if (coverBottom.current && coverUp.current && start) {
-            easing.damp3(coverBottom.current.position, [0, 1, -1.5], 2, delta)
-            easing.damp3(coverUp.current.position, [0, 1, 1.5], 2, delta)
+            easing.damp3(coverBottom.current.position, [0, 1, -1.6], 2, delta)
+            easing.damp3(coverUp.current.position, [0, 1, 1.6], 2, delta)
         } else {
             easing.damp3(coverBottom.current.position, [0, 1, -0.5], 2, delta)
             easing.damp3(coverUp.current.position, [0, 1, 0.5], 2, delta)
@@ -39,6 +37,7 @@ function PortalEnv() {
 
     return (
         <>
+            {/* coverBottom */}
             <mesh
                 ref={coverBottom}
                 castShadow
@@ -50,6 +49,7 @@ function PortalEnv() {
                 <meshStandardMaterial color={"#f0f0f0"} />
             </mesh>
 
+            {/* coverUp */}
             <mesh
                 ref={coverUp}
                 castShadow
@@ -61,12 +61,14 @@ function PortalEnv() {
                 <meshStandardMaterial color={"#f0f0f0"} />
             </mesh>
 
+            {/* Inne rs */}
             <mesh
                 ref={mesh}
+                position={[0, 0, 0]}
                 castShadow
                 receiveShadow
             >
-                <boxGeometry />
+                <dodecahedronGeometry />
                 <meshStandardMaterial color={gltfColor} />
             </mesh>
         </>

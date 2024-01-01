@@ -6,25 +6,49 @@ import { SpotLightHelper } from 'three'
 import { easing } from 'maath'
 
 import PortalEnv from './PortalEnv'
+import { useGlobal } from '../context/useGlobal'
+import { Lights } from './Lights'
 
 export const Portal = () => {
+    const { start, gltfColor } = useGlobal()
+
+    const mesh = useRef()
+
+    useFrame((state, delta) => {
+        if (mesh.current)
+            mesh.current.rotation.x = mesh.current.rotation.y += delta
+    })
 
     return (
         <>
+
+            <Lights />
+
             <mesh position={[0, -1, 0]} castShadow receiveShadow>
                 <boxGeometry args={[2, 2, 2]} />
                 <Side rotation={[0, Math.PI / 2, Math.PI / 2]} index={2}>
                     <PortalEnv />
                 </Side>
+
+                {/* Inner */}
+                <mesh
+                    ref={mesh}
+                    position={[0, 0, 0]}
+                    castShadow
+                    receiveShadow
+                >
+                    <dodecahedronGeometry />
+                    <meshStandardMaterial color={gltfColor} />
+                </mesh>
             </mesh>
         </>
     )
 }
 
 function Side({ rotation = [0, 0, 0], children, index }) {
+    const { bg } = useGlobal()
     const li = useRef()
     // useHelper(li, SpotLightHelper, 10, "red");
-    const { bg } = useControls({ bg: '#f0f0f0' })
     const { nodes } = useGLTF('/aobox-transformed.glb')
     return (
         <>
@@ -35,7 +59,11 @@ function Side({ rotation = [0, 0, 0], children, index }) {
                 {/** A box with baked AO */}
                 <mesh castShadow receiveShadow rotation={rotation} geometry={nodes.Cube.geometry}>
 
-                    <meshStandardMaterial aoMapIntensity={1} aoMap={nodes.Cube.material.aoMap} color={bg} />
+                    <meshStandardMaterial
+                        aoMapIntensity={1}
+                        aoMap={nodes.Cube.material.aoMap}
+                        color={bg}
+                    />
 
                     <spotLight ref={li} castShadow color={bg} intensity={15} position={[5, 4, 2.5]} angle={0.3} penumbra={1} shadow-normalBias={0.05} shadow-bias={0.001} />
                 </mesh>
