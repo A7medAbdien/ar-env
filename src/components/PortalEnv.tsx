@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Mesh } from 'three';
 import { useGlobal } from '../context/useGlobal';
 import useDelayedEasing from '../hooks/useDelayedEasing';
+import Model from './Model';
 
 function PortalEnv() {
     const { start, gltfColor, endPos } = useGlobal()
@@ -61,15 +62,12 @@ function PortalEnv() {
                 <meshStandardMaterial color={"#f0f0f0"} />
             </mesh>
 
-            {/* Inne rs */}
-            <mesh
+            {/* Inners */}
+            <Model
                 ref={mesh}
                 castShadow
                 receiveShadow
-            >
-                <dodecahedronGeometry />
-                <meshStandardMaterial color={gltfColor} />
-            </mesh>
+            />
         </>
     );
 }

@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { Portal } from './components/portal';
 import { Perf } from 'r3f-perf';
 import { Canvas } from '@react-three/fiber';
+import { Lights } from './components/Lights';
 
 export default function Experience() {
     return <Canvas
@@ -17,6 +18,7 @@ export default function Experience() {
         }}
     >
 
+        <Lights />
         {/* <ambientLight /> */}
         {/* <pointLight position={[10, 10, 10]} /> */}
 

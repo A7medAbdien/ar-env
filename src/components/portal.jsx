@@ -1,14 +1,13 @@
-import { useRef, useEffect } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, Edges, MeshPortalMaterial, CameraControls, Environment, PivotControls, useHelper } from '@react-three/drei'
-import { useControls } from 'leva'
-import { SpotLightHelper } from 'three'
+import { useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { useGLTF, MeshPortalMaterial, Environment, useHelper } from '@react-three/drei'
 import { easing } from 'maath'
 
 import PortalEnv from './PortalEnv'
 import { useGlobal } from '../context/useGlobal'
-import { Lights } from './Lights'
-import useDelayedEasing from '../hooks/useDelayedEasing';
+import useDelayedEasing from '../hooks/useDelayedEasing'
+import Model from './Model'
+import { SpotLightHelper } from 'three'
 
 export const Portal = () => {
     const { start, gltfColor, endPos } = useGlobal()
@@ -29,8 +28,6 @@ export const Portal = () => {
     return (
         <>
 
-            <Lights />
-
             <group position={[0, -1, 0]}>
                 <mesh castShadow receiveShadow>
                     <boxGeometry args={[2, 2, 2]} />
@@ -40,15 +37,12 @@ export const Portal = () => {
                 </mesh>
 
                 {/* Inner */}
-                <mesh
+                <Model
                     ref={mesh}
                     visible={start}
                     castShadow
                     receiveShadow
-                >
-                    <dodecahedronGeometry />
-                    <meshStandardMaterial color={gltfColor} />
-                </mesh>
+                />
             </group>
         </>
     )
