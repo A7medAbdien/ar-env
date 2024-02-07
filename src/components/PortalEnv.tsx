@@ -65,6 +65,7 @@ function PortalEnv() {
             {/* Inners */}
             <Model
                 ref={mesh}
+                visible={start}
                 castShadow
                 receiveShadow
             />
