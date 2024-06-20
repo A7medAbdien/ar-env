@@ -20,7 +20,7 @@ export const Portal = () => {
             mesh.current.rotation.x = mesh.current.rotation.y += delta
 
         if (mesh.current && startEasing)
-            easing.damp3(mesh.current.position, endPos, 4, delta)
+            easing.damp3(mesh.current.position, endPos, 1, delta)
         else
             easing.damp3(mesh.current.position, [0, 0, 0], 1, delta)
     })
